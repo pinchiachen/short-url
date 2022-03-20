@@ -1,0 +1,12 @@
+# package directories
+node_modules
+
+# npm lock file
+package-lock.json
+
+.vscode
+
+# Misc directories and files
+.misc
+
+spec.md
