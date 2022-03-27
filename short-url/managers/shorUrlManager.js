@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import moment from 'moment-timezone';
+import errorHanlding from '../error-handling';
 import { logging } from '../../infrastructure';
 import { urlKeyModel } from '../models';
 
@@ -9,12 +11,12 @@ function createUrlKey(url = '') {
 }
 
 function getIndexByUrlKey(urlKey = '') {
-  const total = Array.from(urlKey).reduce((acc, char) => {
-    acc += char.charCodeAt(0);
-    return acc;
+  const codeSum = Array.from(urlKey).reduce((codeAcc, char) => {
+    codeAcc += char.charCodeAt(0);
+    return codeAcc;
   }, 0);
 
-  return total % 8;
+  return codeSum % 8;
 }
 
 async function createShortUrl({
@@ -28,24 +30,34 @@ async function createShortUrl({
     expireDate,
   });
 
-  let urlKey = customAlias;
-  if (!urlKey) {
-    urlKey = createUrlKey(originalUrl);
-  }
-
+  const urlKey = customAlias || createUrlKey(originalUrl);
   const index = getIndexByUrlKey(urlKey);
 
-  await urlKeyModel.createUrlKey({
+  const successCreated = await urlKeyModel.createUrlKey({
     originalUrl,
     urlKey,
     index,
-    expiredStamp: expireDate,
+    expiredStamp: moment.utc(expireDate).toDate(),
   });
+  if (!successCreated) {
+    return {
+      error: {
+        msg: 'Url key created failed',
+        errno: errorHanlding.ErrorNumber.ERR_URL_KEY_CREATED_FAILED,
+      }
+    };
+  }
 
-  return { urlKey };
+  return {
+    urlKey,
+
+    error: null,
+  };
 }
 
 const shorUrlManager = {
+  createUrlKey,
+  getIndexByUrlKey,
   createShortUrl,
 };
 

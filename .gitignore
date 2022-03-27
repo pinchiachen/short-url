@@ -9,4 +9,7 @@ package-lock.json
 # Misc directories and files
 .misc
 
+# Test coverage
+coverage
+
 spec.md
