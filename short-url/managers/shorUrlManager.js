@@ -42,8 +42,8 @@ async function createShortUrl({
   if (!successCreated) {
     return {
       error: {
-        msg: 'Url key already exists',
-        errno: errorHanlding.ErrorNumber.ERR_URL_KEY_EXISTS,
+        msg: 'Url key created failed',
+        errno: errorHanlding.ErrorNumber.ERR_URL_KEY_CREATED_FAILED,
       }
     };
   }

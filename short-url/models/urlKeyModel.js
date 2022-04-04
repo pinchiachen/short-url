@@ -46,7 +46,7 @@ async function getOriginalUrlByKey({ urlKey, index }) {
     FROM short_url.`.append(getTableName(index)).append(SQL`
     WHERE true
       AND url_key = ${urlKey}
-      AND expired_stamp > NOW()
+      AND IFNULL(expired_stamp, '2999-12-31T23:59:59Z') > NOW()
   `));
 
   return url;
