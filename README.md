@@ -20,9 +20,11 @@ A short url example built with Node.js, Express, MySQL
 ### Create shorten url
 
 **Endpoint**
+
 POST https://localhost/keys
 
 **Request**
+
 ```JSON
 {
   "original_url": "https://www.google.com", // required
@@ -32,6 +34,7 @@ POST https://localhost/keys
 ```
 
 **Response**
+
 Status Code 201
 ```JSON
 {
@@ -53,9 +56,11 @@ Status Code 400
 ### Get original url
 
 **Endpoint**
+
 GET https://localhost/{key}
 
 **Response**
+
 Status Code 200
 ```JSON
 {
