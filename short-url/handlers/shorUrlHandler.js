@@ -25,7 +25,7 @@ async function handleCreateKey(req, res, next) {
       });
       return;
     }
-  
+
     const {
       urlKey,
       error,
@@ -51,8 +51,42 @@ async function handleCreateKey(req, res, next) {
   }
 }
 
+async function handleGetOriginalUrl(req, res, next) {
+  try {
+    logging.debug(`${HANDLER_NAME}.handleGetOriginalUrl`);
+
+    const { key } = req?.params || {};
+    if (!key) {
+      res.status(HttpStatus.BAD_REQUEST).send({
+        msg: 'key is required',
+      });
+      return;
+    }
+
+    const {
+      url,
+      error,
+    } = await shorUrlManager.getOriginalUrl({ key });
+    if (error) {
+      res.status(errorHanlding.getStatusCodeByErrno(error.errno)).send({
+        msg: error.msg,
+      });
+      return;
+    }
+
+    res.status(HttpStatus.OK).send({
+      url,
+    });
+
+    return;
+  } catch (err) {
+    next(err);
+  }
+}
+
 const shorUrlHandler = {
   handleCreateKey,
+  handleGetOriginalUrl,
 };
 
 export default shorUrlHandler;

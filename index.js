@@ -10,6 +10,7 @@ app.use(express.json());
 
 /** APIs */
 app.post('/keys', shorUrlHandler.handleCreateKey);
+app.get('/keys/:key', shorUrlHandler.handleGetOriginalUrl);
 
 /** Handle unexpected error */
 app.use(function(err, req, res, next) {

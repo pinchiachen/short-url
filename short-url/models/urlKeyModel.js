@@ -38,8 +38,23 @@ async function createUrlKey({
   return affectedRows > 0;
 }
 
+async function getOriginalUrlByKey({ urlKey, index }) {
+  logging.debug(`${MODEL_NAME}.getOriginalUrlByKey`, { urlKey, index });
+
+  const [{ original_url: url } = []] = await mysqlConnector.query(SQL`
+    SELECT original_url
+    FROM short_url.`.append(getTableName(index)).append(SQL`
+    WHERE true
+      AND url_key = ${urlKey}
+      AND expired_stamp > NOW()
+  `));
+
+  return url;
+}
+
 const urlKeyModel = {
   createUrlKey,
+  getOriginalUrlByKey,
 };
 
 export default urlKeyModel;

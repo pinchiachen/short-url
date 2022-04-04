@@ -42,8 +42,8 @@ async function createShortUrl({
   if (!successCreated) {
     return {
       error: {
-        msg: 'Url key created failed',
-        errno: errorHanlding.ErrorNumber.ERR_URL_KEY_CREATED_FAILED,
+        msg: 'Url key already exists',
+        errno: errorHanlding.ErrorNumber.ERR_URL_KEY_EXISTS,
       }
     };
   }
@@ -55,10 +55,36 @@ async function createShortUrl({
   };
 }
 
+async function getOriginalUrl({ key }) {
+  logging.debug(`${MANAGER_NAME}.getOriginalUrl`, { key });
+
+  const index = getIndexByUrlKey(key);
+
+  const url = await urlKeyModel.getOriginalUrlByKey({
+    urlKey: key,
+    index,
+  });
+  if (!url) {
+    return {
+      error: {
+        msg: 'Url key does not exists or is expired',
+        errno: errorHanlding.ErrorNumber.ERR_URL_KEY_NOT_EXISTS_OR_EXPIRED,
+      }
+    };
+  }
+
+  return {
+    url,
+
+    error: null,
+  };
+}
+
 const shorUrlManager = {
   createUrlKey,
   getIndexByUrlKey,
   createShortUrl,
+  getOriginalUrl,
 };
 
 export default shorUrlManager;
