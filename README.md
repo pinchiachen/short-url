@@ -70,6 +70,6 @@ Status Code 200
 Status Code 404
 ```JSON
 {
-  "msg": "Url key does not exists or is expired"
+  "msg": "Url key does not exist or is expired"
 }
 ```

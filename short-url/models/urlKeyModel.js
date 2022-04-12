@@ -30,9 +30,7 @@ async function createUrlKey({
       ${urlKey},
       ${originalUrl},
       ${expiredStamp}
-    ) ON DUPLICATE KEY UPDATE
-      original_url = VALUES(original_url),
-      expired_stamp = VALUES(expired_stamp)
+    )
   `));
 
   return affectedRows > 0;

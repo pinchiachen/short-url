@@ -67,7 +67,7 @@ async function getOriginalUrl({ key }) {
   if (!url) {
     return {
       error: {
-        msg: 'Url key does not exists or is expired',
+        msg: 'Url key does not exist or is expired',
         errno: errorHanlding.ErrorNumber.ERR_URL_KEY_NOT_EXISTS_OR_EXPIRED,
       }
     };
